@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>***</title>
+	</head>
+<body>
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.style.position = 'fixed';
+            canvas.style.top = '0';
+            canvas.style.left = '0';
+            canvas.style.zIndex = '-1';
+            canvas.style.pointerEvents = 'none';
+            document.body.prepend(canvas);
+            
+            // 扩展字符集
+            const chars = '尹皖军アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const fontSize = 16;
+            let columns = [];
+            let frameCount = 0;
+            
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                
+                columns = Array(Math.floor(canvas.width / fontSize)).fill(0).map((_, i) => {
+                    return {
+                        x: i * fontSize,
+                        y: (Math.random() * -canvas.height) - fontSize,
+                        speed: Math.random() * 5 + 2,
+                        length: Math.floor(Math.random() * 15) + 5,
+                        chars: Array(Math.floor(Math.random() * 10) + 5).fill(''),
+                        hue: Math.random() * 360 // 每列初始色调
+                    };
+                });
+            }
+            window.addEventListener('resize', resize);
+            resize();
+            
+            function draw() {
+                ctx.fillStyle = 'rgba(0, 8, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.font = `${fontSize}px monospace`;
+                
+                columns.forEach(col => {
+                    col.y += col.speed * 0.7;
+                    col.hue = (col.hue + 0.5) % 360; // 色调渐变
+                    
+                    if (frameCount % Math.floor(20 / col.speed) === 0) {
+                        col.chars.shift();
+                        col.chars.push(chars[Math.floor(Math.random() * chars.length)]);
+                    }
+                    
+                    col.chars.forEach((char, i) => {
+                        // 头部字符彩色效果
+                        if (i === col.chars.length - 1) {
+                            // 使用HSLA颜色模式实现彩色效果
+                            const hue = col.hue;
+                            ctx.fillStyle = `hsla(${hue}, 100%, 60%, 1)`;
+                        } 
+                        // 中间部分保持绿色渐变
+                        else if (i > col.chars.length - 4) {
+                            ctx.fillStyle = '#0f0';
+                        }
+                        // 尾部淡化
+                        else {
+                            const alpha = 0.1 + (i / col.chars.length) * 0.5;
+                            ctx.fillStyle = `rgba(0, 255, 0, ${alpha})`;
+                        }
+                        
+                        ctx.fillText(char, col.x, col.y + i * fontSize);
+                    });
+                    
+                    if (col.y > canvas.height + col.chars.length * fontSize) {
+                        col.y = (Math.random() * -canvas.height/2) - fontSize;
+                        col.x = Math.floor(Math.random() * columns.length) * fontSize;
+                        col.speed = Math.random() * 5 + 2;
+                        col.hue = Math.random() * 360; // 重置时随机色调
+                    }
+                });
+                
+                frameCount++;
+                requestAnimationFrame(draw);
+            }
+            
+            draw();
+            
+            function addHackerText() {
+                const texts = ['尹皖军'];
+                const text = texts[Math.floor(Math.random() * texts.length)];
+                const size = Math.floor(Math.random() * 10) + 24;
+                const x = Math.random() * (canvas.width - size * text.length);
+                const y = Math.random() * canvas.height;
+                const hue = Math.random() * 360;
+                
+                ctx.font = `${size}px monospace`;
+                
+                // 彩色发光效果
+                ctx.fillStyle = `hsla(${hue}, 100%, 50%, 0.2)`;
+                for (let i = 0; i < 5; i++) {
+                    ctx.fillText(text, x + i, y + i);
+                }
+                
+                ctx.fillStyle = `hsl(${hue}, 100%, 60%)`;
+                ctx.fillText(text, x, y);
+                
+                setTimeout(addHackerText, 5000);
+            }
+            setTimeout(addHackerText, 3000);
+        });
+    </script>
+</body>
+</html>

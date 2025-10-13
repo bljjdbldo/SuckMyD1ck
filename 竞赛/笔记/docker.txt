@@ -1,0 +1,118 @@
+wsl --update #保证wsl最新
+docker info #检查docker状态
+docker version #检查docker版本
+
+Docker Engine 镜像源配置
+在 Docker Desktop Settings → Docker Engine 中配置：
+{
+  "builder": {
+    "gc": {
+      "defaultKeepStorage": "20GB",
+      "enabled": true
+    }
+  },
+  "experimental": false,
+  "registry-mirrors": [
+    "https://docker.mirrors.ustc.edu.cn",
+    "https://hub-mirror.c.163.com",
+    "https://registry.docker-cn.com"
+  ],
+  "features": {
+    "buildkit": true
+  }
+}
+
+docker run hello-world #运行命令测官方终端
+
+clash
+tun
+局域网连接 dns覆写 统一延迟
+
+Hadoop 集群部署
+拉取和启动 Hadoop 镜像
+powershell内
+docker pull harisekhon/hadoop:2.8   # 拉取 Hadoop 镜像（需要稳定网络）
+
+# 启动 Hadoop 单节点容器
+docker run -d -p 50070:50070 -p 8088:8088 -p 9000:9000 -p 9864:9864 --name hadoop-single-node harisekhon/hadoop:2.8
+
+docker exec -it hadoop-single-node bash   # 进入容器
+
+# 进入配置目录
+cd $HADOOP_HOME/etc/hadoop
+
+# 创建正确的yarn-site.xml配置
+cat > yarn-site.xml << 'EOF'
+<?xml version="1.0"?>
+<configuration>
+    <!-- 内存配置 -->
+    <property>
+        <name>yarn.nodemanager.resource.memory-mb</name>
+        <value>2048</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.minimum-allocation-mb</name>
+        <value>512</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.maximum-allocation-mb</name>
+        <value>2048</value>
+    </property>
+    <property>
+        <name>yarn.app.mapreduce.am.resource.mb</name>
+        <value>1024</value>
+    </property>
+    <!-- 虚拟内存配置（避免容器被杀死） -->
+    <property>
+        <name>yarn.app.mapreduce.am.command-opts</name>
+        <value>-Xmx768m</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.vmem-check-enabled</name>
+        <value>false</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.vmem-pmem-ratio</name>
+        <value>4</value>
+    </property>
+    <!-- Shuffle 服务配置（必须） -->
+    <property>
+        <name>yarn.nodemanager.aux-services</name>
+        <value>mapreduce_shuffle</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.aux-services.mapreduce_shuffle.class</name>
+        <value>org.apache.hadoop.mapred.ShuffleHandler</value>
+    </property>
+</configuration>
+EOF
+
+# 退出容器并重启
+exit
+docker restart hadoop-single-node
+
+# 重新进入容器
+docker exec -it hadoop-single-node bash
+
+
+# 检查 Hadoop 服务是否运行
+jps
+# 应该看到：NameNode, DataNode, ResourceManager, NodeManager, SecondaryNameNode
+
+# 检查 YARN 节点
+yarn node -list
+# Web 界面监控
+HDFS NameNode: http://localhost:50070
+YARN ResourceManager: http://localhost:8088
+
+内存不够导致WSL崩溃
+# 创建 WSL 内存配置文件 powershell
+@'
+[wsl2]
+memory=4GB
+processors=2
+swap=2GB
+'@ | Out-File -FilePath "$env:USERPROFILE\.wslconfig" -Encoding utf8
+
+# 重启 WSL
+wsl --shutdown

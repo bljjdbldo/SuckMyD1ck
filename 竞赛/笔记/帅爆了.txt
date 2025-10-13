@@ -1,0 +1,1 @@
+color 0a&dir&color ab&dir&color bc&dir&color cd&dir&color de&dir&color ef&dir&color f0&dir&color 01&dir&color 12&dir&color 23&dir&color 34&dir&color 45&dir&color 56&dir&color 67&dir&color 78&dir&color 89&dir&dir 90&dir&color 0f&dir&color 1f&dir&

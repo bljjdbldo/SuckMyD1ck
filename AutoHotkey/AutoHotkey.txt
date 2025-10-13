@@ -1,0 +1,8 @@
+https://autohotkey.top/
+AutoHotkey常用操作
+运行程序 Run "C:\Windows\notepad.exe"
+弹窗提示 MsgBox "Hi!"
+点击具体坐标 Click 100, 200
+打开网址 Run "http://unixetc.com"
+延时1s Sleep 1000
+发送文本 Send "Hello!"

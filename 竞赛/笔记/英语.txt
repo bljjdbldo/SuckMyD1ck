@@ -1,0 +1,5 @@
+bigdata大数据
+sg-security group安全组
+HADOOP_CONF_DIR CONF-Configuration配置的缩写 DIR-directory文件夹/目录
+bit位
+byte字节

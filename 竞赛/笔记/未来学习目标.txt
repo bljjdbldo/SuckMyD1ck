@@ -1,0 +1,75 @@
+系统
+1.linux： 千锋云
+网络： 
+交换路由
+1.乾颐堂,华为
+无线：
+1.华为
+防火墙： 
+1.山石网科
+
+交换路由
+tcp/ip  三次握手 四次挥手 
+等 。。。
+
+
+动态路由
+
+
+静态路由
+
+
+
+
+
+ipsec vpn  gre VPN   pppoe
+  ppp
+l2tp vpn 
+
+ 
+
+ipsec  over  gre  
+
+
+
+
+arp 
+
+
+.
+
+shell脚本
+python，yaml，xml，shell，php，java，等
+
+
+ansible服务
+playbook
+yaml
+
+tomcat  web服务
+要实现，http自动挑战https
+xml
+
+
+
+原理
+wireshark
+
+kdc加密
+
+
+
+
+网络安全，综合布线
+
+网络安全：
+1. 数字取证   wireshark  抓包
+2.应急响应    防守
+
+
+综合：
+1.网线
+2
+
+
+

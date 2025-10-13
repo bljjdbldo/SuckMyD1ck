@@ -1,0 +1,19 @@
+ABRT 已检测到 '1' 个问题。预了解详细信息请执行：abrt-cli list --since 1729151746
+[root@node2 ~]# abrt-cli list --since 1729151746
+id 3d9984d0b3b206880ead0d4b69b9daf5444cec8a
+reason:         WARNING: CPU: 0 PID: 3562 at drivers/scsi/scsi_lib.c:2858 scsi_device_quiesce+0xb4/0xc0
+time:           2024年10月17日 星期四 16时28分21秒
+cmdline:        BOOT_IMAGE=/vmlinuz-3.10.0-1160.119.1.el7.x86_64 root=/dev/mapper/centos-root ro crashkernel=auto spectre_v2=retpoline rd.lvm.lv=centos/root rd.lvm.lv=centos/swap rhgb quiet LANG=zh_CN.UTF-8
+package:        kernel
+uid:            0 (root)
+count:          1
+Directory:      /var/spool/abrt/oops-2024-10-17-16:28:21-4005-0
+
+
+已禁用自动报告功能。请考虑启用该功能，方法是
+作为有 root 特权的用户使用命令 'abrt-auto-reporting enabled'
+
+JDK环境配置，scp命令有问题成功复制到不知道哪里去了
+scp命令显示no such file or directory
+服了，find了一下还是给我整到./pwd/hadoop-3.4.0了(((
+问题命令scp -r hadoop-3.4.0 node2:'pwd'/

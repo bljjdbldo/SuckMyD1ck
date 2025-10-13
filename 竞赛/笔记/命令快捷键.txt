@@ -1,0 +1,10 @@
+win+R
+control控制面板项
+firewall.cpl防火墙设置
+sysdm.cpl系统属性
+ncpa.cpl网络适配器网络连接
+hdwwiz.cpl设备管理器
+gpedit.msc本地组策略编辑器(secpol.msc本地安全策略)
+lusrmgr.msc用户账户
+services.msc服务
+compmgmtlauncher计算机管理

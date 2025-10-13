@@ -1,0 +1,215 @@
+history或ctrl+r(再次按换命令)
+启动HDFS
+start-dfs.sh
+启动YARN集群
+history或ctrl+r(再次按换命令)
+启动HDFS
+start-dfs.sh
+启动YARN集群
+start-yarn.sh
+启动历史服务器
+mapred --daemon start historyserver
+初始化元数据库
+cd /export/server/hive/bin
+./schematool -initSchema -dbType mysql -verbos
+mysql -uroot -p
+show databases;
+use hive
+show tables;
+退出NameNode安全模式，允许HDFS更改
+hdfs dfsadmin -safemode  leave
+启动metastore服务
+nohup /export/serverbin/hive --service metastore
+bin/hive
+启动hiveserver2服务
+nohup bin/hive --service metastore >> logs/metastore.log 2>&1 &
+nohup bin/hive --service hiveserver2 >> logs/hiveserver2.log 2>&1 &
+
+
+	
+数据库：
+英文单词DataBase ,简称DB。按照一定格式存储数据的一些文件的组合。
+顾名思义：存储数据的仓库，实际上就是一堆文件。这些文件中存储了具有特定格式的数据。
+
+数据库类型：
+关系型数据库（RDBMS）
+通过表存储数据的数据库，建立在关系模型基础上，有多张相互连接的二维表组成的数据库
+特点：
+1.使用表存储数据，格式同意，便于维护
+2.使用SQL语言操作，标准统一，使用方便
+非关系型数据库（NoSQL）
+NoSQL泛指非关系型数据库，易扩展，数据库种类繁多，共同去掉关系数据库的关系型特点。数据之间无关系，结构简单的无关系性，大数据量下都具有非常高的读写性能
+
+数据库管理系统（Database Management System）简称DBMS
+数据库管理系统是专门用来管理数据库中数据的，数据库管理系统可以对数据库当中的数据进行增删改查
+常见的数据库管理系统: MySQL、Oracle、MS SqlServer、DB2、sybase等
+
+SQL：
+*结构化查询语言（Structured Query Language）简称SQL，数据库查询和程序设计语言，通过编写SQL语句，然后DBMS负责执行SQL语句，最终来完成数据库中数据的增删改查操作
+SQL分类
+DQL数据库查询语言（Data Query Language）负责进行数据查询而不会对数据本身修改的语言，常用保留字SELECT，FROM，WHERE，GROUP BY，HAVING，ORDER BY
+DDL数据定义语言（Data Definition Language）负责数据结构定义与数据库对象定义的语言，由CREATE、ALTER、DROP三个语法组成
+DML数据操纵语言（Data Manipulation Langguage）负责对数据库对象运行数据访问工作的指令集，以INSERT、UPDATE、DELETE三种指令为核心，分别代表插入、更新与删除
+DCL数据控制语言（Data Control Language）是一种可对数据访问权进行控制的指令，它可以控制特定用户账户对数据表、查看表、预存程序、用户自定义函数等数据库对象的控制权，由GRANT和REVOKE两个指令组成，GRANT为授权语句，REVOKE撤销语句
+TPL数据事务管理语言（Transaction Processing Language）确保被DML语句影响的表的所有行及时得以更新，TPL语句包括BEGINTRANSACTION，COMMIT、ROLLBACK
+CCL指针控制语言（Cursor Control Langugage）
+*DBMS、SQL、DB关系
+DBMS--执行-->SQL--操作-->DB
+DBMS通过执行SQL来操作DB中的数据
+数据库组织数据
+按照：库->表->数据 三个层级组织
+SQL特征
+*SQL大小写不敏感select SELECT Select
+*SQL语句需以；号结尾
+*SQL支持单行、多行注释
+-- 单行注释，--后面要加一个空格
+# 单行注释，#后面可加可不加空格
+/*
+多行注释
+多行注释
+*/
+
+选择配置环境变量path:
+如果没有选择怎么办?你可以手动配置
+path=其它路径：C:\Program Files(x86)\MySQL\MySQL Server 5.5\bin
+
+本地登录(显示编写密码的形式)：
+C:\Users\Administrator>mysql -uroot -p123456
+mysql>
+本地登录(隐藏密码的形式)：
+C:\Users\Administrator>mysql -urcot -p
+Enter password:*******
+mysql>
+
+1.查数据库
+show databases;
+
+2.创数据库，起名omori
+create database omori;
+
+3.使用数据库
+use omori;
+
+4.查看当前使用的数据库
+select database();
+
+5.查表
+show tables;
+
+6.删除数据库
+drop database omori;
+注意: 以分号结尾，分号是英文的分号。
+注意：以上的命令不区分大小写，都行。
+
+7.退出mysql
+	exit
+	quit
+	ctrl+c
+
+8.查看mysql数据库的版本号：
+select version();
+查看当前使用的是哪个数据库？
+注意：mysql是不见“；”不执行，“；”表示结束！
+
+DDL中数据库管理语法
+show databases;查
+use 数据库名称;用
+create database 数据库名称 [charset utf8];创
+drop database 数据库名称;删
+select database();查当前
+
+DDL中数据表管理语法
+show tables;查
+drop table;删
+create table 表名称(
+列名称 列类型,
+列名称 列类型,
+……
+);
+--列类型有
+int --整数
+float --浮点数
+varchar（长度） --文本、长度为数字，做最大长度限制
+date --日期类型
+timestamp --时间戳类型
+
+
+数据库表
+name age gender
+张三   20   男
+李四   22   女
+
+表的英文单词是table
+列叫做字段(column)：name字段，age字段，gender字段
+行叫做记录(row)：一行就是一条数据
+
+字段名：name、age、gender都是字段的名字
+字段的数据类型：每个字段都有数据类型，比如字符类型、数学类型、日期类型
+字段的数据长度：每个字段有可能会有长度的限制
+字段的约束：比如某些字段要求该字段下的数据不能重复、不能为空等，用来保证表格中数据合法有效
+
+
+在语法描述中出现：
+[]，表示可选，可写可不写
+|，表示或，二选一
+…，表示序列，即未完结，比如select exper,…表示在select后可以跟多个exper（查询表达式），以逗号隔开
+()，表示必填
+SQL-DML
+1.DML插入、删除、更新的语法
+insert into 表[(列1,列2,……,列N)]values(值1,值2,……,值N)[,(值1,值2,……,值N),……,(值1,值2,……,值N)]
+delete from 表名称 [where 条件判断]
+update 表名 set 列=值 [where 条件判断];
+条件判断：列 操作符 值
+操作符：=   <   >   <=   >=   !=等等，如
+id=5
+id<3
+id>=6
+id!=5
+2.注意事项
+字符串的值，出现在SQL语句中，必须要用单引号包围起来
+
+SQL-DQL基础查询
+1.基础查询
+select 字段列表|* from 表
+2.过滤查询
+select 字段列表|* from 表 where 条件判断 #字符串自变量要用单引号
+
+SQL-DQL分组聚合
+DQL：GROUP BY 分组聚合查询
+1.分组聚合的语法
+select 字段|聚合函数 from 表 [where 条件] group by 列
+聚合函数有：
+- sum（列）求和
+- avg（列）求平均值
+- min（列）求最小值
+- max（列）求最大值
+- count（列|*）求数量
+2.分组聚合的注意事项
+group by中出现了哪个列，哪个列才能出现在select中的非聚合中
+
+SQL-DQL排序分页
+1.排序和分页限制的语法
+select 列|聚合函数|* from 表
+where …
+group by …
+order by … [asc|desc]升序 降序 默认升序
+limit  n [,m]限制结果集为n条；跳过n行，取m条
+2.需注意
+where、group by、order by、limit均可按需求省略
+select和from是必写的
+执行顺序
+from->where->group by和聚合函数->select->order by->limit
+
+SQL-DQL-JOIN关联
+关联查询的常见方式：
+from多个表，给予where做关联条件
+语法：select…from 表1 as 别名 ,…, 表N as 别名 where 关联条件;
+不推荐使用，因为会先产生笛卡尔集，然后再过滤，效率低下
+内关联
+语法：select…form 表1 as 别名 join 表2 as 别名 on 关联条件;
+推荐使用，逐条关联，效率高于from多表的方式
+结果集方式：是2个表的交集，必须双向关联成功
+外关联
+语法：select…from 表1 as 别名 (left|right)join 表2 as 别名 on 关联条件;
+结果集方式：以一个表为主，left join以左表为主，right join以右表为主
+为主的表的全部数据都会显示在结果集中，未关联到的数据以null代替

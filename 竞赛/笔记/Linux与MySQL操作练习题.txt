@@ -1,0 +1,135 @@
+Linux与MySQL操作练习题（无答案版）
+
+说明： 所有操作需在 Linux 终端或 MySQL 命令行中执行，注意区分大小写。 
+一、Linux 基础操作
+进入当前用户的家目录
+新建一个名为 hello 的文件夹并进入该目录
+创建一个文件 hello 并写入内容"hello linux"（要求一条命令完成）
+查看 hello 文件的内容
+修改 hello 文件的权限，仅允许文件所有者读写
+新建一个用户 mysql，并指定其家目录为/database
+在 hello 文件夹中创建一个空文件 hello2
+进入根目录/，查找名为 hello 的文件所在路径
+删除 hello 目录及其内成都容
+查找 cat 命令所在的绝对路径
+列出/etc 目录下的所有文件和目录（包括隐藏文件）
+将 cat 命令的可执行文件复制到/tmp 目录
+进入/tmp 目录，将 cat 文件重命名为 hello，并设置权限为所有用户仅可执行
+将/tmp 目录添加到环境变量 PATH 中，并直接运行 hello 命令
+在根目录下创建文件 hello，内容为"i am linux,hello"，hello并使用 hello 命令查看内容
+将 hello 文件的内容覆盖写入到 hello2 文件（一条命令完成）
+将 hello 文件的内容追加到 hello2 文件末尾（一条命令完成）
+查找/home 目录下所有扩展名为.sh 的文件
+二、用户和权限管理
+创建一个名为 mysql 的用户组
+将文件 hello2 的所属组修改为 mysql
+设置 hello2 文件的权限：所属组可读写，其他用户只读
+切换到 mysql 用户，并将其密码修改为 12345678
+向 hello2 文件末尾追加一行内容"12345"
+三、MySQL 服务管理
+在 mysql 用户的家目录下安装 MySQL 服务（根据系统选择 yum 或 apt）
+检查 MySQL 服务是否正在运行
+启动 MySQL 服务
+四、MySQL 数据库操作
+创建一个名为 company 的数据库
+切换到 company 数据库
+创建表 employees，包含字段：id（整型，主键）、name（字符串，长度 50）、age
+（整型）、hire_date（日期）
+查看当前数据库中的所有表
+删除表 employees
+向表 employees 添加一个 email 字段（类型为 VARCHAR(100)）
+插入一条记录：id=1，name='Alice'，age=30，hire_date='2024-01-01'
+查询 employees 表中所有员工的 name 和 age 字段
+查询 age 大于 25 的员工信息
+按 age 降序排列查询所有员工
+统计 employees 表中的员工总数
+将 id=1 的员工的 age 更新为 31
+删除 age 小于 18 的员工记录
+清空 employees 表的所有数据（保留表结构）
+重置 employees 表（清空数据并恢复自增主键）
+五、MySQL 用户权限管理
+创建一个新用户 devuser，密码为 123456
+授予 devuser 用户对 company 数据库的所有权限
+撤销 devuser 用户对 company 数据库的所有权限
+
+Linux  和 MySQL 操作指南
+1. 文件系统操作
+cd ~
+ mkdir hello && cd hello
+ echo "hello linux" > hello
+ cat hello
+ chmod 600 hello
+ useradd -m -d /database mysql
+ touch hello2
+ cd / && find -name hello
+ rm -r hello
+ which cat
+ ls -a /etc
+ cp $(which cat) /tmp
+ cd /tmp && mv cat hello && chmod 111 hello
+ export PATH=$PATH:/tmp && hello
+ echo "i am linux,hello" > /hello && hello /hello
+ cat hello > hello2
+ cat hello >> hello2
+find /home -name "*.sh"
+ 2. 用户和权限管理
+groupadd mysql
+ chgrp mysql hello2
+ chmod g+rw,o+r hello2
+ su mysql && passwd
+输入新密码
+: 12345678
+ echo "12345" >> hello2
+ 3. MySQL 服务管理
+# 在
+mysql
+家目录安装
+mysql
+ systemctl status mysql
+ systemctl start mysql
+ 4. 数据库操作-- 
+服务 (
+具体命令取决于发行版)
+创建数据库 
+CREATE DATABASE company;-- 
+切换数据库 -- 
+USE company;
+创建表 
+CREATE TABLE employees ( id INT PRIMARY KEY, name 
+VARCHAR(50), age INT, hire_date DATE );-- 
+查看所有表 
+SHOW TABLES;-- 
+删除表 
+DROP TABLE employees;
+-- 
+添加字段 
+ALTER TABLE employees ADD COLUMN email VARCHAR(100);-- 
+插入记录 
+INSERT INTO employees VALUES (1, 'Alice', 30, '2024-01
+01');-- 
+查询姓名和年龄 -- 
+SELECT name, age FROM employees;
+条件查询 
+SELECT * FROM employees WHERE age > 25;-- 
+排序查询 
+SELECT * FROM employees ORDER BY age DESC;-- 
+统计查询 
+SELECT COUNT(*) FROM employees;-- 
+更新记录 
+UPDATE employees SET age = 31 WHERE id = 1;-- 
+条件删除 
+DELETE FROM employees WHERE age < 18;-- 
+清空表 
+DELETE FROM employees;-- 
+重置表 
+TRUNCATE TABLE employees;
+ 5. 用户权限管理-- 
+创建用户 
+CREATE USER 'devuser'@'localhost' IDENTIFIED BY 
+'123456';-- 
+授权 
+GRANT ALL PRIVILEGES ON company.* TO 
+'devuser'@'localhost';-- 
+撤销权限 
+REVOKE ALL PRIVILEGES ON company.* FROM 
+'devuser'@'localhost';

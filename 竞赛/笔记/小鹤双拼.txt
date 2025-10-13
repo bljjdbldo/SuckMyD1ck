@@ -1,0 +1,10 @@
+win + R，输入 regedit，打开注册表 
+找到 计算机\HKEY_CURRENT_USER\Software\Microsoft\InputMethod\Settings\CHS 项 
+新建一个字符串值，名称为UserDefinedDoublePinyinScheme0 
+值为 小鹤双拼*2*^*iuvdjhcwfg^xmlnpbksqszxkrltvyovt 
+打开控制面板 -> 微软拼音输入法设置，把 小鹤双拼 设置为双拼的默认选择即可
+
+cmd粘贴
+reg add HKCU\Software\Microsoft\InputMethod\Settings\CHS /v UserDefinedDoublePinyinScheme0 /t REG_SZ /d "小鹤双拼*2*^*iuvdjhcwfg^xmlnpbksqszxkrltvyovt" /f
+
+https://www.keyspell.top/

@@ -1,0 +1,55 @@
+@charset="utf-8";
+/*css document*/
+.table_border{
+	border- top: 1px dottred #663300;
+	border-right:1px dasshed #663300;
+	border-bottom:1px solid #663300;
+	border-left:1px dashed #663300;}
+.header_border{
+	border-bottom:1px dashed #ff6600;}
+table ul li{
+	line-height: 2em;
+	list-style-image: url(img/pic.GIF);
+	text-indent: 1em;
+	font-size: 28px;}
+a:link,a:visited{
+	color: #67421d;
+	text-decoration: none;}
+a:hover{
+	font-style: italic;
+	color: #51c64c;
+	text-decoration: underline;}
+a:active{
+	color: #a643a0;
+	text-decoration: none;}
+.table_border1{
+	border: 1px solid #969486;}
+.title{
+	font-family: "方正姚体";
+	font-size: 28px;
+	font-weight: bold;
+	color: #473b2f;}
+	.author{
+		font-family: "隶书";
+		font-size: 24px;
+		color: #361609;
+		line-height: 1.5em;
+		border-bottom-width: 3px;
+		border-bottom-style: double;
+		border-bottom-color: #8e9434;	}
+	table td.content p{
+		font-family: "幼园";
+		font-size: 18px;
+		font-style:normal;
+		line-height:1 ;
+		font-weight: lighter;
+		color: #483819;
+		letter-spacing:0.2em ;
+		text-indent:3em ;	}
+	table td.introduce p{
+		font-family: "仿宋";
+		font-size: 15px;
+		line-height:1.5em ;
+		font-weight: lighter;
+		color: #382f18;
+		text-indent:2em ;	}

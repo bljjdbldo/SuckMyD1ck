@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>表格</title>
+		<style type="text/css">
+			.beijing{
+			background-image: url(img/2.png);
+			cursor: not-allowed;
+		}
+			.a{
+				background-color:#0000ff;
+			}
+			td{
+				background-color:#aaaa7f;
+				text-align:center;
+			}
+			td:hover{
+				background: #00fff0;
+			}
+			tr:hover{
+				background:#FCF;
+			}
+			</style>
+	</head>
+	<body class="beijing">
+		<table width="30" border="1"><tr>
+			<td>100</td>
+		</tr></table>
+		<br>
+		<table width="100" border="1"><tr>
+			<td>100</td>
+			<td>200</td>
+			<td>300</td>
+		</tr></table>
+		<br>
+		<table width="30" border="1"><tr>
+			<td>100</td>
+			<td>200</td>
+			<td>300</td>
+		</tr>
+		<tr>
+			<td>400</td>
+			<td>500</td>
+			<td>600</td>
+		</tr></table>
+		<br>
+		<table width="300px" border="1"><tr>
+			<td>行一1</td>
+			<td>行二2</td>
+			<td>行三3</td>
+		</tr>
+		<tr>
+			<td>行一1</td>
+			<td>行二2</td>
+			<td>行三3</td>
+		</tr>
+		<tr>
+			<td>行一1</td>
+			<td>行二2</td>
+			<td>行三3</td>
+		</tr></table>
+		<br>
+		<table  class="a" cellspacing="10"><tr>
+			<td colspan="2">行一1</td>
+			<td>行二2</td>
+		</tr>
+		<tr>
+			<td rowspan="2">行一1</td>
+			<td>行二2</td>
+			<td>行三3</td>
+		</tr>
+		<tr>
+			<td>行一1</td>
+			<td>行二2</td>
+		</tr>
+
+	</body>
+</html>

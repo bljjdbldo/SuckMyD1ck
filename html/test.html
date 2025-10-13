@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的个人空间</title>
+    <style>
+        :root {
+            --primary: #00ff9d;
+            --secondary: #00b8ff;
+            --dark: #0a0a0a;
+            --light: #f5f5f5;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        /* 粒子背景 - 纯CSS实现 */
+        .particles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: float 15s infinite linear;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px);
+                opacity: 0;
+            }
+        }
+        
+        /* 导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(10px);
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 300;
+            position: relative;
+            padding: 5px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        /* 主要内容区 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 5%;
+        }
+        
+        /* 首页部分 */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            position: relative;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.2;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 1s forwards 0.3s;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 1s forwards 0.6s;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 255, 157, 0.5);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 1s forwards 0.9s;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 25px rgba(0, 255, 157, 0.8);
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .cta-button:hover::before {
+            left: 100%;
+        }
+        
+        /* 动画关键帧 */
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* 关于我部分 */
+        .about {
+            padding: 100px 0;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 1s forwards;
+        }
+        
+        .section-title.in-view {
+            animation: fadeInUp 1s forwards;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), transparent);
+        }
+        
+        .about-content {
+            display: flex;
+            gap: 50px;
+            align-items: center;
+        }
+        
+        .about-text {
+            flex: 1;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s ease;
+        }
+        
+        .about-text.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .about-image {
+            flex: 1;
+            position: relative;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s ease 0.3s;
+        }
+        
+        .about-image.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .profile-img {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(0, 255, 157, 0.3);
+            transition: all 0.5s ease;
+        }
+        
+        .profile-img:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 40px rgba(0, 255, 157, 0.5);
+        }
+        
+        /* 技能部分 */
+        .skills {
+            padding: 100px 0;
+        }
+        
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        
+        .skill-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 255, 157, 0.1);
+            backdrop-filter: blur(5px);
+            opacity: 0;
+            transform: translateY(50px) scale(0.9);
+            transition: all 0.8s ease;
+        }
+        
+        .skill-card.in-view {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        
+        .skill-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 255, 157, 0.2);
+            border-color: rgba(0, 255, 157, 0.3);
+        }
+        
+        .skill-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+        
+        .skill-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        /* 兴趣爱好部分 */
+        .hobbies {
+            padding: 100px 0;
+        }
+        
+        .hobby-slider {
+            display: flex;
+            gap: 30px;
+            overflow-x: auto;
+            padding: 20px 0;
+            scroll-snap-type: x mandatory;
+        }
+        
+        .hobby-card {
+            min-width: 300px;
+            scroll-snap-align: start;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 255, 157, 0.1);
+            opacity: 0;
+            transform: translateX(100px);
+            transition: all 0.8s ease;
+        }
+        
+        .hobby-card:nth-child(even) {
+            transform: translateX(-100px);
+        }
+        
+        .hobby-card.in-view {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .hobby-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 255, 157, 0.3);
+        }
+        
+        .hobby-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .hobby-info {
+            padding: 20px;
+        }
+        
+        .hobby-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        /* 联系部分 */
+        .contact {
+            padding: 100px 0;
+        }
+        
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s ease;
+        }
+        
+        .contact-form.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 157, 0.3);
+            border-radius: 5px;
+            color: var(--light);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(0, 255, 157, 0.3);
+        }
+        
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        /* 页脚 */
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            background: rgba(10, 10, 10, 0.8);
+            margin-top: 100px;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s ease;
+        }
+        
+        footer.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .social-links a {
+            color: var(--light);
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            color: var(--primary);
+            transform: translateY(-5px);
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .about-content {
+                flex-direction: column;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 纯CSS粒子背景 -->
+    <div class="particles" id="particles-js"></div>
+    
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <a href="#" class="logo">MY<span style="color: var(--secondary)">SPACE</span></a>
+        <div class="nav-links">
+            <a href="#home">首页</a>
+            <a href="#about">关于我</a>
+            <a href="#skills">技能</a>
+            <a href="#hobbies">兴趣爱好</a>
+            <a href="#contact">联系我</a>
+        </div>
+    </nav>
+    
+    <!-- 主要内容 -->
+    <div class="container">
+        <!-- 首页部分 -->
+        <section id="home" class="hero">
+            <h1>你好，我是<span style="display: block;">尹皖军</span></h1>
+            <p>一名暂时充满激情的学生</p>
+            <a href="#about" class="cta-button">了解更多</a>
+        </section>
+        
+        <!-- 关于我部分 -->
+        <section id="about" class="about">
+            <h2 class="section-title">关于我</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>我是一名来自绍兴市职业教育中心23大专网安的学生</p>
+                    <p>我的专长包括Linux操作系统、Windows Server操作系统及服务和数据库Mysql hadoop等。我热衷于探索新技能和好玩的，并不断学习新技术来提升自己。</p>
+                    <p>在我的职业生涯中，我参加了两次竞赛，在其中完成了bilibili@湖科大教书匠 的网络计算机基础 对于操作windows系统和网络方面有深入了解，后续还学习了Linux。我相信选择大于努力，努力大于躺平，而我三者都不是，只不过兴趣使然，未曾感到社会压力罢了😊</p>
+                </div>
+                <div class="about-image">
+                    <img src="" alt="我的照片" class="profile-img">
+                </div>
+            </div>
+        </section>
+        
+        <!-- 技能部分 -->
+        <section id="skills" class="skills">
+            <h2 class="section-title">我的技能</h2>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <div class="skill-icon">💻♿</div>
+                    <h3>便捷使用</h3>
+                    <p>精通AutoHotkey，Quicker，能制作方便快捷的电脑Macro。</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">🎨</div>
+                    <h3>UI/UX设计</h3>
+                    <p>擅长创建直观美观的用户界面，注重用户体验和交互设计。</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">⚙️</div>
+                    <h3>后端开发</h3>
+                    <p>熟悉Node.js, Python和数据库及Mysql等语言设计，能够构建完整的Web应用。</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">🤖</div>
+                    <h3>AI开发</h3>
+                    <p>具备AI大模型语言和OllamaSetup开发经验，能够构建适合本地使用的AI。</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 兴趣爱好部分 -->
+        <section id="hobbies" class="hobbies">
+            <h2 class="section-title">兴趣爱好</h2>
+            <div class="hobby-slider">
+                <div class="hobby-card">
+                    <img src="https://via.placeholder.com/300x200/0a0a0a/00ff9d?text=Photography" alt="游戏" class="hobby-img">
+                    <div class="hobby-info">
+                        <h3>游戏</h3>
+                        <p>喜爱各类游戏，是游戏的死忠粉，尤其喜欢FPS和动作及休闲等独立游戏。</p>
+                    </div>
+                </div>
+                <div class="hobby-card">
+                    <img src="https://via.placeholder.com/300x200/0a0a0a/00ff9d?text=Travel" alt="运动" class="hobby-img">
+                    <div class="hobby-info">
+                        <h3>运动</h3>
+                        <p>喜爱自行车，跑步，发自内心热爱运动，因为我觉得自己有点胖。</p>
+                    </div>
+                </div>
+                <div class="hobby-card">
+                    <img src="https://via.placeholder.com/300x200/0a0a0a/00ff9d?text=Music" alt="音乐" class="hobby-img">
+                    <div class="hobby-info">
+                        <h3>音乐</h3>
+                        <p>电脑钢琴爱好者，喜欢节奏快有爽感的曲子也喜欢有深度的——比如草东没有派对，偶尔也创作自己的曲子。</p>
+                    </div>
+                </div>
+                <div class="hobby-card">
+                    <img src="https://via.placeholder.com/300x200/0a0a0a/00ff9d?text=Reading" alt="阅读" class="hobby-img">
+                    <div class="hobby-info">
+                        <h3>阅读</h3>
+                        <p>热衷于游戏技术和专业技术相关书籍，每月至少读完两本书。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 联系部分 -->
+        <section id="contact" class="contact">
+            <h2 class="section-title">联系我</h2>
+            <form class="contact-form">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="你的名字" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" class="form-control" placeholder="你的邮箱" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="主题">
+                </div>
+                <div class="form-group">
+                    <textarea class="form-control" placeholder="你的消息" required></textarea>
+                </div>
+                <button type="submit" class="cta-button">发送消息</button>
+            </form>
+        </section>
+    </div>
+    
+    <!-- 页脚 -->
+    <footer>
+        <div class="social-links">
+            <a href="#">GitHub</a>
+            <a href="#">LinkedIn</a>
+            <a href="#">Twitter</a>
+            <a href="#">Instagram</a>
+        </div>
+        <p>&copy; 2023 [你的名字]. 保留所有权利。</p>
+    </footer>
+    
+    <script>
+        // 纯CSS粒子背景生成
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles-js');
+            const particleCount = Math.floor(window.innerWidth / 10);
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // 随机位置
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.top = Math.random() * 100 + 'vh';
+                
+                // 随机大小
+                const size = Math.random() * 3 + 1;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                
+                // 随机动画延迟
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // 滚动动画检测
+        function checkScroll() {
+            const elements = document.querySelectorAll('.section-title, .about-text, .about-image, .skill-card, .hobby-card, .contact-form, footer');
+            
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (elementTop < windowHeight - 100) {
+                    element.classList.add('in-view');
+                }
+            });
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            checkScroll();
+            
+            // 首页元素自动动画
+            const heroElements = document.querySelectorAll('.hero h1, .hero p, .hero .cta-button');
+            heroElements.forEach((el, index) => {
+                el.style.animationDelay = (index * 0.3) + 's';
+            });
+            
+            // 技能卡片动画
+            const skillCards = document.querySelectorAll('.skill-card');
+            skillCards.forEach((card, index) => {
+                card.style.transitionDelay = (index * 0.1) + 's';
+            });
+            
+            // 兴趣爱好卡片动画
+            const hobbyCards = document.querySelectorAll('.hobby-card');
+            hobbyCards.forEach((card, index) => {
+                card.style.transitionDelay = (index * 0.1) + 's';
+            });
+        });
+        
+        // 滚动事件监听
+        window.addEventListener('scroll', checkScroll);
+    </script>
+</body>
+</html>

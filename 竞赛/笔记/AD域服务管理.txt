@@ -1,0 +1,18 @@
+第1-3章节综合（上）
+================ 组织单位 用户 组 =================
+1. AD域服务的安装
+服务器管理器 -- （右上角）管理 -- 添加角色和功能 -- 服务器角色（Active Directory 域服务） -- 安装
+（右上角）黄色叹号！ -- 将此服务器提升为域服务器 -- 添加新林 sxszjzx.com -- 设置DSRM密码 -- NetBIOS 自动分析出域名 -- （先决条件检查无误）安装 -- 自动重启（需要等较长的时间）
+2. （域下的）组织单位和用户 P. 40
+sxszjzx.com -- 创建管理员xiaozhang -- 服务器管理器 -- Active Directory 用户和计算机 -- sxszjzx.com -- 新建 -- 用户 -- xiaozhang （4个地方）
+sxszjzx.com -- 创建管理员banzhuren -- 服务器管理器 -- Active Directory 用户和计算机 -- sxszjzx.com -- 新建 -- 用户 -- banzhuren （4个地方）
+ 创建组织单位 -- 新建 -- 组织单位 -- wangan23
+给wangan23组织单位委派管理员banzhuren  -- wangan23组织单位 -- 委派控制 -- 添加banzhuren -- 委派任务（权限）选择1、4 -- 完成
+3. （域下的）全局组和本地组、用户 P. 46 
+创建组织单位用户 -- wangan23 -- 新建 -- 用户 student01-04
+创建全局组 -- sxszjzx.com -- 新建 -- 组 -- xuejiguanli（学籍管理） -- 全局（默认）
+创建全局组 -- sxszjzx.com -- 新建 -- 组 -- laoshizu（老师组） -- 全局（默认）
+加入全局组（每位同学的学籍信息录入到学校的学籍管理系统） -- xuejiguanli -- 属性 -- 成员 -- 添加 student01-04
+创建本地组：sxszjzx.com -- 新建 -- 组 -- huodongzhongxin（学生活动中心） -- 本地域
+创建本地组：sxszjzx.com -- 新建 -- 组 -- 办公室（bangongshi） -- 本地域
+加入域组：全局组xuejiguanli加入到本地组jiaowuchu -- jiaowuchu 属性 -- 成员 -- 添加xuejiguanli组
