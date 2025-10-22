@@ -1,0 +1,30 @@
+VMware0 -桥接模式 虚拟机的虚拟网卡通过“桥接”的方式，直接连接到物理网卡上，占用物理网络的IP地址，可以被路由器下其他手机、电脑，互联网内访问
+VMware1 -仅主机模式  所有虚拟机和物理机直接互相通信，但虚拟机无法访问外部网络，IP地址由DHCP分配，通常是固定私有网段192.168.xxx.xxx
+VMware8 -NAT模式 虚拟机分配在一个私有网络中，物理机是私有网络的“路由器”“网关” 虚拟机访问互联网，物理机通过NAT技术，将虚拟机的私有IP转换为自己物理网卡的公有IP
+
+本机的虚拟网卡
+安装了VMware，会在物理机的网络连接里创建两块虚拟网卡
+VMware Network Adapter VMnet1：物理机通过这个网卡与仅主机模式下的虚拟机通信
+VMware Network Adapter VMnet8：物理机通过这个网卡与NAT模式下的虚拟机通信，并且负责NAT转换和路由
+VMnet0没有对应虚拟网卡，因为它直接桥接到了物理网卡上
+
+VMnet8 NAT设置
+网关IP通常默认为192.168.XXX.2
+BOOTPROTO="static" #从dhcp改为static
+IPADDR=
+NETMASK=
+GATEWAY=
+DNS=
+
+service network restart #重启网络服务 刷新配置
+
+VMware8的网关是.2不是.1
+安装VMware会创建一虚拟网网卡VMnet8，网卡默认获取192.168.XXX.1(物理机与虚拟机通信接口) 所以网关就是192.168.XXX.2(虚拟机网络出口)
+物理机VMnet8网卡：192.168.XXX.1←管理接口
+VMnet网关：192.168.XXX.2←路由/NAT接口
+虚拟机：192.168.XXX.3-254
+
+
+双网卡（NAT+仅主机模式）
+虚拟机设置->添加->网络适配器
+

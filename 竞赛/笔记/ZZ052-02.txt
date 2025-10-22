@@ -1,0 +1,209 @@
+VMware
+磁盘CentOS7
+
+服务器	master	 	slave1		 slave2
+ DHFS	 NameNode
+ HDFS	 SecondaryNameNode
+ HDFS	DataNode		DataNode		DataNode
+ YARN	 ResourceManager
+ YARN	 NodeManager	NodeManager	NodeManager
+历史日志服务器 JobHistoryServer
+
+关防火墙
+systemctl stop firewalld
+systemctl disable firewalld
+
+重启一下init 6 （init 0）
+
+看虚拟机Nat模式
+物理机 VMnet8 网卡: 192.168.1.1   ← 管理接口
+VMnet8 网关:        192.168.1.2   ← 路由/NAT 接口
+修改hosts文件
+vi /etc/hosts
+192.168.1.131 master
+192.168.1.132 slave1
+192.168.1.133 slave2
+
+克隆master-slave1和slave2
+
+如需修改IP地址
+vi /etc/sysconfig/network-scripts/ifcfg-ens33
+BOOTPROTO=static
+ONBOOT=yes
+IPADDR=192.168.1.130
+NETMASK=255.255.255.0
+GATEWAY=vm8 ip地址
+或者
+nmcli connection show #查看当前网络链接
+nmcli connection modify "ens33" ipv4.addresses "192.168.1.3/24"
+nmcli connection modify "ens33" ipv4.gateway "192.168.1.2" # 网关
+nmcli connection modify "ens33" ipv4.method manual # 从DHCP改为手动
+nmcli connection up "ens33" # 重新启用连接，使配置生效
+
+systemctl restart network
+
+改名
+hostnamectl set-hostname master
+hostnamectl set-hostname slave1
+hostnamectl set-hostname slave2
+
+ssh-keygen -t rsa -b 4096 #每台都执行）-b 4096更安全
+ssh-copy-id master #都执行
+ssh-copy-id slave1 #
+ssh-copy-id slave2 #
+
+systemctl status sshd   #检查SSH服务状态
+systemctl start sshd     # 如果未运行，启动 SSH
+systemctl enable sshd    # 设置开机自启
+
+mkdir -p /opt/software
+mkdir -p /opt/module
+ssh slave1 "mkdir -p /opt/module"
+ssh slave2 "mkdir -p /opt/module"
+
+下载安装包hadoop.apache.org   jdk
+用Xftp 8把安装包传输到/opt/software
+
+解压到/opt/module路径中
+tar -zxvf jdk-8u191-linux-x64.tar.gz -C /opt/module
+tar -zxvf hadoop-3.4.0.tar.gz -C /opt/module
+
+scp -r /opt/module/(文件夹名称） slave1:/opt/module/
+scp -r /opt/module/(文件夹名称） slave1:/opt/module/
+scp -r /opt/module/(文件夹名称） slave2:/opt/module/
+scp -r /opt/module/(文件夹名称） slave2:/opt/module/
+
+配置JDK环境变量
+vim /etc/profile
+
+#JDK_HOME
+export JAVA_HOME=/root/software/jdk1.8.0_281
+export PATH=$PATH:$JAVA_HOME/bin
+export CLASSPATH=.:$JAVA_HOME/bin/dt.jar:$JAVA_HOME/lib/tools.jar
+#HADOOP_HOME
+export HADOOP_HOME=/root/software/hadoop-3.4.0
+export PATH=$PATH:$HADOOP_HOME/bin
+export PATH=$PATH:$HADOOP_HOME/sbin
+
+source /etc/profile
+
+
+
+java-version
+javac
+验证
+
+workers
+master
+slave1
+slave2
+
+{hadoop-env.sh}
+vi /opt/module/hadoop-3.4.0/etc/hadoop/hadoop-env.sh
+#添加
+export JAVA_HOME=/root/software/jdk1.8.0_281
+export HDFS_NAMENODE_USER=root
+export HDFS_DATANODE_USER=root
+export HDFS_SECONDARYNAMENODE_USER=root
+export YARN_RESOURCEMANAGER_USER=root
+export YARN_NODEMANAGER_USER=root
+
+HDFS,YARN文件
+核心配置文件
+{core-site.xml}
+/opt/module/hadoop-3.4.0/etc/hadoop/core-site.xml
+<configuration>
+    <property>
+        <name>fs.defaultFS</name>
+        <value>hdfs://nbb:9000</value>
+    </property>
+    <property>
+        <name>hadoop.tmp.dir</name>
+        <value>/root/software/hadoop-3.4.0/hadoopDatas/tempDatas</value>
+    </property>
+</configuration>
+
+HDFS
+{hdfs-site.xml}
+<configuration>
+    <property>
+        <name>dfs.replication</name>
+        <value>2</value>
+    </property>
+    <property>
+        <name>dfs.namenode.name.dir</name>
+        <value>/root/software/hadoop-3.4.0/hadoopDatas/namenodeDatas</value>
+    </property>
+    <property>
+        <name>dfs.datanode.data.dir</name>
+        <value>/root/software/hadoop-3.4.0/hadoopDatas/datanodeDatas</value>
+    </property>
+    <property>
+        <name>dfs.permissions.enabled</name>
+        <value>false</value>
+    </property>
+    <property>
+        <name>dfs.namenode.http-address</name>
+        <value>nbb:9870</value>
+    </property>
+    <property>
+        <name>dfs.namenode.secondary.http-address</name>
+        <value>nbb:9868</value>
+    </property>
+</configuration>
+
+YARN
+{yarn-site.xml}
+<configuration>
+    <property>
+        <name>yarn.resourcemanager.hostname</name>
+        <value>nbb</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.aux-services</name>
+        <value>mapreduce_shuffle</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.vmem-check-enabled</name>
+        <value>false</value>
+    </property>
+</configuration>
+
+MapReduce
+{mapred-site.xml}
+<configuration>
+    <property>
+        <name>mapreduce.framework.name</name>
+        <value>yarn</value>
+    </property>
+    <property>
+        <name>mapreduce.application.classpath</name>
+        <value>/root/software/hadoop-3.4.0/share/hadoop/mapreduce/*:/root/software</value>
+    </property>
+    <property>
+        <name>mapreduce.jobhistory.address</name>
+        <value>nbb:10020</value>
+    </property>
+    <property>
+        <name>mapreduce.jobhistory.webapp.address</name>
+        <value>nbb:19888</value>
+    </property>
+</configuration>
+
+hadoop安装目录下执行：
+mkdir -p hadoopDatas/tempDatas
+mkdir -p hadoopDatas/namenodeDatas
+mkdir -p hadoopDatas/datanodeDatas
+mkdir -p hadoopDatas/dfs/nn/edit
+mkdir -p hadoopDatas/dfs/snn/name
+mkdir -p hadoopDatas/dfs/nn/snn/edits
+
+scp -r /root/software/hadoop3.4.0 root@slave1:/root/software
+scp -r $HADOOP_HOME/etc/hadoop/ slave1:$HADOOP_HOME/etc/
+scp -r $HADOOP_HOME/etc/hadoop/ slave2:$HADOOP_HOME/etc/
+分发Hadoop配置文件
+start-all.sh
+jps #检查进程	#停止stop-all.sh #rm -rf /root/software/hadoop-3.4.0/hadoopDatas/
+mapred --daemon start historyserver #启动历史服务器
+
+
